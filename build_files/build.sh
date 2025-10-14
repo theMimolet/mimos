@@ -22,3 +22,20 @@ dnf5 install -y tmux
 #### Example for enabling a System Unit File
 
 systemctl enable podman.socket
+
+# Remove gaming packages
+echo "Removing unnecessary gaming packages..."
+rpm-ostree override remove \
+    steam \
+    lutris \
+    waydroid \
+    || true  # Continue même si certains packages n'existent pas
+
+# Add your custom packages
+echo "Installing custom packages..."
+rpm-ostree install \
+    gnome-tweaks
+
+## Installation of mandatory Gnome Extensions
+rpm-ostree install gnome-shell-extension-appindicator \
+                   gnome-shell-extension-dash-to-panel
