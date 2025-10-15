@@ -27,6 +27,7 @@ systemctl enable podman.socket
 echo "Removing unnecessary gaming packages..."
 rpm-ostree override remove \
     waydroid \
+    waydroid-selinux \
     cage \
     wlr-randr \
     steam \
