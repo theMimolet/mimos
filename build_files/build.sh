@@ -26,9 +26,11 @@ systemctl enable podman.socket
 # Remove gaming packages
 echo "Removing unnecessary gaming packages..."
 rpm-ostree override remove \
-    steam \
-    lutris \
     waydroid \
+    cage \
+    wlr-randr \
+    steam \
+    lutris
     || true  # Continue même si certains packages n'existent pas
 
 # Add your custom packages
@@ -39,3 +41,5 @@ rpm-ostree install \
 ## Installation of mandatory Gnome Extensions
 rpm-ostree install gnome-shell-extension-appindicator \
                    gnome-shell-extension-dash-to-panel
+
+echo "MimOS customization complete!"
