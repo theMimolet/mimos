@@ -31,7 +31,7 @@ rpm-ostree override remove \
     cage \
     wlr-randr \
     steam \
-    lutris
+    lutris \
     || true  # Continue même si certains packages n'existent pas
 
 # Add your custom packages
