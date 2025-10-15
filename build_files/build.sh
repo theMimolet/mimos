@@ -32,6 +32,7 @@ rpm-ostree override remove \
     wlr-randr \
     steam \
     lutris \
+    sunshine \
     || true  # Continue même si certains packages n'existent pas
 
 # Add your custom packages
@@ -39,8 +40,23 @@ echo "Installing custom packages..."
 rpm-ostree install \
     gnome-tweaks
 
+rpm-ostree install adw-gtk3-theme
+
 ## Installation of mandatory Gnome Extensions
-rpm-ostree install gnome-shell-extension-appindicator \
-                   gnome-shell-extension-dash-to-panel
+rpm-ostree install gnome-shell-extension-dash-to-panel \
+                   gnome-shell-extension-drive-menu
+
+rpm-ostree override remove \
+                   gnome-shell-extension-restart-to \
+                   gnome-shell-extension-just-perfection \
+                   gnome-shell-extension-blur-my-shell \
+                   gnome-shell-extension-bazzite-menu \
+
+# Remove Steam and Lutris from blocklist so they appear in Bazaar
+sed -i '/com.valvesoftware.Steam/d' /usr/share/ublue-os/bazaar/blocklist.txt
+sed -i '/net.lutris.Lutris/d' /usr/share/ublue-os/bazaar/blocklist.txt
+sed -i '/dev.lizardbyte.app.Sunshine/d' /usr/share/ublue-os/bazaar/blocklist.txt
+
 
 echo "MimOS customization complete!"
+echo "Note: Some programs like Steam and Lutris have been removed. Users can install Flatpak versions."
