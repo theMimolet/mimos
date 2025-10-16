@@ -30,7 +30,34 @@ rpm-ostree override remove \
     steam \
     lutris \
     sunshine \
-    || true  # Continue même si certains packages n'existent pas
+    || true
+
+### Clear any caches ###
+rm -rf /var/cache/bazaar || true
+rm -rf /var/cache/flatpak || true
+
+# Remove Steam files
+rm -rf /usr/bin/steam* || true
+rm -rf /usr/bin/bazzite-steam* || true
+rm -rf /usr/share/applications/steam*.desktop || true
+rm -rf /usr/lib/steam || true
+rm -rf /etc/skel/.config/autostart/steam.desktop || true
+rm -rf /etc/xdg/autostart/steam.desktop || true
+
+# Remove Lutris files
+rm -rf /usr/bin/lutris* || true
+rm -rf /usr/share/applications/*lutris*.desktop || true
+rm -rf /usr/share/lutris || true
+
+# Remove Waydroid files
+rm -rf /usr/bin/waydroid* || true
+rm -rf /usr/share/applications/Waydroid || true
+rm -rf /usr/share/applications/waydroid*.desktop || true
+rm -rf /usr/share/waydroid || true
+rm -rf /usr/lib/waydroid || true
+
+
+rm -rf /usr/share/applications/discourse.desktop || true
 
 # Add your custom packages
 echo "Installing custom packages..."
@@ -49,10 +76,25 @@ rpm-ostree override remove \
                    gnome-shell-extension-bazzite-menu \
 
 # Remove Steam and Lutris from blocklist so they appear in Bazaar
-echo "Unblocking gaming software from Bazaar..."
+#echo "Unblocking gaming software from Bazaar..."
+#sed -i '/com.valvesoftware.Steam/d' /usr/share/ublue-os/bazaar/blocklist.txt
+#sed -i '/net.lutris.Lutris/d' /usr/share/ublue-os/bazaar/blocklist.txt
+#sed -i '/dev.lizardbyte.app.Sunshine/d' /usr/share/ublue-os/bazaar/blocklist.txt
+
+### Modify Bazaar blocklist ###
+echo "Modifying Bazaar blocklist..."
+
+# Show before
+echo "BEFORE:"
+cat /usr/share/ublue-os/bazaar/blocklist.txt | grep -E "(Steam|Lutris)" || echo "No Steam/Lutris found"
+
+# Remove from blocklist
 sed -i '/com.valvesoftware.Steam/d' /usr/share/ublue-os/bazaar/blocklist.txt
 sed -i '/net.lutris.Lutris/d' /usr/share/ublue-os/bazaar/blocklist.txt
-sed -i '/dev.lizardbyte.app.Sunshine/d' /usr/share/ublue-os/bazaar/blocklist.txt
+
+# Show after
+echo "AFTER:"
+cat /usr/share/ublue-os/bazaar/blocklist.txt | grep -E "(Steam|Lutris)" || echo "Steam/Lutris removed from blocklist!"
 
 
 echo "MimOS customization complete!"
