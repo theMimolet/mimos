@@ -9,9 +9,6 @@ set -ouex pipefail
 # List of rpmfusion packages can be found here:
 # https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
 
-# this installs a package from fedora repos
-dnf5 install -y tmux 
-
 # Use a COPR Example:
 #
 # dnf5 -y copr enable ublue-os/staging
@@ -37,15 +34,14 @@ rpm-ostree override remove \
 
 # Add your custom packages
 echo "Installing custom packages..."
-rpm-ostree install \
-    gnome-tweaks
-
-rpm-ostree install adw-gtk3-theme
+dnf5 install -y adw-gtk3-theme gnome-tweaks
 
 ## Installation of mandatory Gnome Extensions
-rpm-ostree install gnome-shell-extension-dash-to-panel \
+echo "Installing gnome extensions..."
+dnf5 install -y  gnome-shell-extension-dash-to-panel \
                    gnome-shell-extension-drive-menu
 
+echo "Removing unnecessary gnome extensions..."
 rpm-ostree override remove \
                    gnome-shell-extension-restart-to \
                    gnome-shell-extension-just-perfection \
@@ -53,10 +49,11 @@ rpm-ostree override remove \
                    gnome-shell-extension-bazzite-menu \
 
 # Remove Steam and Lutris from blocklist so they appear in Bazaar
+echo "Unblocking gaming software from Bazaar..."
 sed -i '/com.valvesoftware.Steam/d' /usr/share/ublue-os/bazaar/blocklist.txt
 sed -i '/net.lutris.Lutris/d' /usr/share/ublue-os/bazaar/blocklist.txt
 sed -i '/dev.lizardbyte.app.Sunshine/d' /usr/share/ublue-os/bazaar/blocklist.txt
 
 
 echo "MimOS customization complete!"
-echo "Note: Some programs like Steam and Lutris have been removed. Users can install Flatpak versions."
+echo "Note: Some programs like Steam and Lutris have been removed. Users can install the Flatpak versions."
